@@ -242,11 +242,11 @@ fi
 
 # Set up DevStack sudoers
 TEMPFILE=`mktemp`
-echo "$STACK_USER ALL=(root) NOPASSWD:ALL" >$TEMPFILE
+echo "stack ALL=(root) NOPASSWD:ALL" >$TEMPFILE
 # Some binaries might be under ``/sbin`` or ``/usr/sbin``, so make sure sudo will
 # see them by forcing ``PATH``
-echo "Defaults:$STACK_USER secure_path=/sbin:/usr/sbin:/usr/bin:/bin:/usr/local/sbin:/usr/local/bin" >> $TEMPFILE
-echo "Defaults:$STACK_USER !requiretty" >> $TEMPFILE
+echo "Defaults:stack secure_path=/sbin:/usr/sbin:/usr/bin:/bin:/usr/local/sbin:/usr/local/bin" >> $TEMPFILE
+echo "Defaults:stack !requiretty" >> $TEMPFILE
 chmod 0440 $TEMPFILE
 sudo chown root:root $TEMPFILE
 sudo mv $TEMPFILE /etc/sudoers.d/50_stack_sh
@@ -316,7 +316,7 @@ DEST=${DEST:-/opt/stack}
 # Create the destination directory and ensure it is writable by the user
 # and read/executable by everybody for daemons (e.g. apache run for horizon)
 sudo mkdir -p $DEST
-safe_chown -R $STACK_USER $DEST
+safe_chown -R stack $DEST
 safe_chmod 0755 $DEST
 
 # Destination path for devstack logs
@@ -327,7 +327,7 @@ fi
 # Destination path for service data
 DATA_DIR=${DATA_DIR:-${DEST}/data}
 sudo mkdir -p $DATA_DIR
-safe_chown -R $STACK_USER $DATA_DIR
+safe_chown -R stack $DATA_DIR
 
 # Configure proper hostname
 # Certain services such as rabbitmq require that the local hostname resolves
@@ -1143,7 +1143,7 @@ if is_service_enabled n-net q-dhcp; then
     if is_service_enabled n-net; then
         rm -rf ${NOVA_STATE_PATH}/networks
         sudo mkdir -p ${NOVA_STATE_PATH}/networks
-        safe_chown -R ${STACK_USER} ${NOVA_STATE_PATH}/networks
+        safe_chown -R stack ${NOVA_STATE_PATH}/networks
     fi
 
     # Force IP forwarding on, just in case
